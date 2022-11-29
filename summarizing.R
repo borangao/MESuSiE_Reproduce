@@ -9,7 +9,8 @@ library(VennDiagram)
 library(gridExtra)
 library(DescTools)
 load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/res_all.RData")
-
+#res_all_subset<-res_all%>%filter(SuSiE_Either>0.5|MESuSiE_PIP_Shared>0.5|Paintor_PIP>0.5|MESuSiE_PIP_WB>0.5|MESuSiE_PIP_BB>0.5)
+#write.csv(res_all_subset,"/net/fantasia/home/borang/Susie_Mult/Paper_Figure/summarized_data_new/Table_S2.csv", row.names = FALSE,quote=F)
 ################################################
 #
 #		Set Size/Z-score/eQTL
@@ -65,7 +66,7 @@ load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/res_all.RD
 					levels(set_size_z_info_long$Method)<-c("MESuSiE","SuSiE","Paintor")
 
 					p_z = ggplot(data = set_size_z_info_long,aes(x = Trait, y=Z,fill=Method))+geom_bar( stat = "identity",position="dodge")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"))
-					p_z = p_z + theme_bw() + xlab("") +ylab("Median Z")
+					p_z = p_z + theme_bw() + xlab("") +ylab("Median |Z|")
 					p_z = p_z + theme(axis.text.x = element_text( size = 16),
 									axis.text.y = element_text( size = 16),  
 									axis.title.x = element_text( size = 18),
@@ -97,7 +98,7 @@ load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/res_all.RD
 				
 				Either_Ancestry_cs_Ann_long_subset_eQTL<- Either_Ancestry_cs_Ann_long[ Either_Ancestry_cs_Ann_long$Cat=="eQTL",]
 				p_eQTL = ggplot(data = Either_Ancestry_cs_Ann_long_subset_eQTL,aes(x = Trait, y=Prop,fill=Method))+geom_bar( stat = "identity",position="dodge")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"))
-				p_eQTL = p_eQTL+ theme_bw() + xlab("") +ylab("eQTL Enrichment")
+				p_eQTL = p_eQTL+ theme_bw() + xlab("") +ylab("eQTL Fold Enrichment")
 				p_eQTL = p_eQTL + theme(axis.text.x = element_text( size = 16),
 								axis.text.y = element_text( size = 16),  
 								axis.title.x = element_text( size = 18),
@@ -111,6 +112,7 @@ load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/res_all.RD
 
 				p_out<-p_set/p_z/p_eQTL
 
+				ggsave("/net/fantasia/home/borang/Susie_Mult/real_data/summary_data_lipid/070722/Figure/real_data_sets_info.jpeg",p_out,dpi=300,width=6,height =12)
 				
 
 ###############################################################
@@ -153,8 +155,8 @@ load("/net/fantasia/home/borang/Susie_Mult/website_material/real_data/res_all.RD
 				Either_Ancestry_cs_Ann_long_subset$Prop<-round(Either_Ancestry_cs_Ann_long_subset$Prop,2)
 				
 				p = ggplot(data = Either_Ancestry_cs_Ann_long_subset,aes(x=Cat,y=Prop,fill=Method))+geom_col( position="dodge")
-				p = p + xlab("")+ylab("Relative Enrichment") + theme_bw() + geom_hline(yintercept = 1, linetype = "dashed")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"))
-				p = p + geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 2,fontface="bold")
+				p = p + xlab("")+ylab("Fold Enrichment") + theme_bw() + geom_hline(yintercept = 1, linetype = "dashed")+scale_fill_manual(values=c("MESuSiE"="#023e8a","SuSiE"="#2a9d8f","Paintor"="#f4a261"))
+				p = p + geom_text(aes(x=Cat,group=Method,y=Prop,label=Prop),position = position_dodge(width = 1),vjust=-0.5,size = 4,fontface="bold")
 				p = p + theme(axis.text.x = element_text( size = 16,angle=90),
 				              axis.text.y = element_text( size = 16),  
 				              axis.title.x = element_text( size = 18),
